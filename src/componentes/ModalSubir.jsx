@@ -24,32 +24,32 @@ const ModalSubir = () => {
       const formData = crearArchivo();
 
       if (formData) {
-        const respuesta = await axios.post("/upload", formData, {
+        const respuesta = await axios.post("/subir", formData, {
           headers: { "Content-Type": "multipart/form-data" },
           withCredentials: false,
         });
-        console.log("File upload successful:", respuesta.data);
+        console.log("El archivo se subio:", respuesta.data);
+        handleOcultarAgregar();
       } else {
-        console.warn("No file or data to upload.");
+        console.warn("No se ha seleccionado ningun archivo.");
       }
     } catch (error) {
       console.error("Error uploading file:", error);
     }
   };
 
-  // Function to create FormData object
+  // datos del formulario
   const crearArchivo = () => {
-    const formData = new FormData(); // Use FormData for multipart uploads
+    const datosFormulario = new FormData();
 
-    // Handle image upload if file is selected
     if (imagen) {
-      formData.append("imagen", imagen); // Append the file
+      datosFormulario.append("imagen", imagen);
     } else {
-      console.warn("No se ha seleccionado el archivo."); // Inform user
-      return null; // Exit if no file selected
+      console.warn("No se ha seleccionado el archivo.");
+      return null;
     }
 
-    return formData; // Return populated FormData object
+    return datosFormulario;
   };
 
   return (
@@ -63,7 +63,7 @@ const ModalSubir = () => {
         <Modal.Body>
           <Form>
             <FormGroup>
-              <FormLabel>Imágen</FormLabel>
+              <FormLabel>Seleccione el archivo</FormLabel>
               <FormControl
                 required
                 type="file"
@@ -71,7 +71,7 @@ const ModalSubir = () => {
                 id="imagen"
                 name="imagen"
                 autoComplete="off"
-                onChange={(e) => setImagen(e.target.files[0])} // Get the first selected file
+                onChange={(e) => setImagen(e.target.files[0])}
               />
             </FormGroup>
           </Form>
